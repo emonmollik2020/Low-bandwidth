@@ -1,0 +1,8 @@
+body { background-color: #f8fafc; font-family: 'Segoe UI', sans-serif; }
+.card { background: white; border-radius: 1rem; border: 1px solid #f1f5f9; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+.tag { border: 1px solid #e2e8f0; color: #475569; padding: 2px 10px; border-radius: 99px; font-size: 10px; font-weight: 800; display: inline-block; margin: 2px; }
+.tag-bull { background: #f0fdf4; color: #166534; border-color: #dcfce7; } 
+.tag-bear { background: #fef2f2; color: #991b1b; border-color: #fee2e2; }
+.tag-neutral { background: #f1f5f9; color: #475569; border-color: #e2e8f0; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
