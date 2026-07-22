@@ -1,8 +1,4 @@
 // dashboard.js
-// BANDWIDTH OPTIMIZATION:
-//   - Removed hash check (backend already broadcasts on state change only)
-//   - ai_thoughts update added to updateDashboard()
-//   - Single WebSocket connection handles everything
 let active_tf = '15m'; 
 let global_data = null;
 let ws = null;
@@ -31,7 +27,7 @@ function connectWebSocket() {
 // ট্যাব চেঞ্জ বা নতুন টাইমফ্রেম সিলেক্ট করার লজিক
 function selectTF(tf) {
     active_tf = tf;
-    should_fit_content = true;
+    should_fit_content = true; // নতুন টাইমফ্রেম সিলেক্ট করলে চার্ট একবার স্বয়ংক্রিয়ভাবে জুম ফিট হবে
     renderActiveTF();
     loadCandles(); 
 }
@@ -105,14 +101,6 @@ function updateDashboard(d) {
     if (!d || d.price <= 0) return;
     
     global_data = d; 
-    
-    // BANDWIDTH OPT: ai_thoughts update directly here
-    if (d.ai_thoughts) {
-        const thoughtsEl = document.getElementById("ai_thoughts");
-        if (thoughtsEl) {
-            thoughtsEl.innerText = d.ai_thoughts;
-        }
-    }
     
     document.getElementById('pr').innerText = '$' + d.price; 
     document.getElementById('bl').innerText = '$' + d.balance.toFixed(2);
