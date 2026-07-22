@@ -1,7 +1,14 @@
 // dashboard.js
+// BANDWIDTH OPTIMIZATION:
+//   - State change detection: only update DOM when data actually changes
+//   - ai_thoughts update from same WebSocket (no duplicate connection)
+//   - loadCandles: 15s polling kept (chart needs periodic refresh)
 let active_tf = '15m'; 
 let global_data = null;
 let ws = null;
+
+// BANDWIDTH OPT: Track last state hash to avoid unnecessary DOM updates
+let _lastStateHash = null;
 
 function connectWebSocket() {
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
@@ -11,11 +18,28 @@ function connectWebSocket() {
 
     ws.onmessage = function(event) {
         const data = JSON.parse(event.data);
+        
+        // BANDWIDTH OPT: Only update if state actually changed
+        const currentHash = JSON.stringify(data);
+        if (currentHash === _lastStateHash) {
+            return; // Skip update, no change
+        }
+        _lastStateHash = currentHash;
+        
         updateDashboard(data);
+        
+        // BANDWIDTH OPT: Update AI thoughts from same WebSocket data
+        if (data.ai_thoughts) {
+            const thoughtsEl = document.getElementById("ai_thoughts");
+            if (thoughtsEl) {
+                thoughtsEl.innerText = data.ai_thoughts;
+            }
+        }
     };
 
     ws.onclose = function() {
         console.log("WebSocket connection lost. Reconnecting in 5 seconds...");
+        _lastStateHash = null; // Reset hash on reconnect
         setTimeout(connectWebSocket, 5000);
     };
 
