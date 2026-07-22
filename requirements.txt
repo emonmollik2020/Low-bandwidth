@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+websockets
+ccxt
+pandas
+ta
+sqlalchemy
+psycopg2-binary
+jinja2
+scikit-learn
