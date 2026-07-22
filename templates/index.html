@@ -170,8 +170,26 @@
 <script src="/static/js/chart.js"></script>
 <script src="/static/js/dashboard.js"></script>
 
-<!-- BANDWIDTH OPTIMIZATION: Removed duplicate inline WebSocket -->
-<!-- dashboard.js already handles ai_thoughts update from single WebSocket -->
-
+<script>
+    // এআই লাইভ থট প্রসেস রিয়েল-টাইম আপডেট করার জন্য কাস্টম ওয়েবসোকেট লিসেনার
+    (function() {
+        const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        const wsUrl = protocol + window.location.host + '/ws';
+        const thoughtsWs = new WebSocket(wsUrl);
+        thoughtsWs.onmessage = function(event) {
+            try {
+                const data = JSON.parse(event.data);
+                if (data.ai_thoughts) {
+                    const thoughtsEl = document.getElementById("ai_thoughts");
+                    if (thoughtsEl) {
+                        thoughtsEl.innerText = data.ai_thoughts;
+                    }
+                }
+            } catch (e) {
+                // Ignore parsing errors
+            }
+        };
+    })();
+</script>
 </body>
 </html>
