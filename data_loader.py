@@ -247,4 +247,4 @@ async def bootstrap_or_backfill_btc():
                 except Exception:
                     pass
     
-    return df_btcঔ
+    return df_btc
